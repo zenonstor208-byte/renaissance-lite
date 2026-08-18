@@ -14,7 +14,9 @@ export const Route = createFileRoute("/clients")({
   component: Clients,
 });
 
-const clients = [
+type Client = { name: string; contact: string; email: string; deals: number; status: string };
+
+const clients: [Client, ...Client[]] = [
   { name: "شركة الأفق", contact: "نور العلي", email: "nour@ofoq.com", deals: 6, status: "نشط" },
   { name: "مجموعة نهضة", contact: "خالد سمير", email: "khaled@nahda.co", deals: 3, status: "نشط" },
   { name: "دار المعمار", contact: "رنا يوسف", email: "rana@dar.sa", deals: 2, status: "متوقف" },
