@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { Mail, Phone, Building2, CircleCheck, CirclePause } from "lucide-react";
 import { PageHeader } from "@/components/AppShell";
 
 export const Route = createFileRoute("/clients")({
@@ -14,79 +14,109 @@ export const Route = createFileRoute("/clients")({
   component: Clients,
 });
 
-type Client = { name: string; contact: string; email: string; deals: number; status: string };
+type Client = {
+  name: string;
+  contact: string;
+  email: string;
+  phone: string;
+  deals: number;
+  active: boolean;
+  projects: string[];
+};
 
-const clients: [Client, ...Client[]] = [
-  { name: "شركة الأفق", contact: "نور العلي", email: "nour@ofoq.com", deals: 6, status: "نشط" },
-  { name: "مجموعة نهضة", contact: "خالد سمير", email: "khaled@nahda.co", deals: 3, status: "نشط" },
-  { name: "دار المعمار", contact: "رنا يوسف", email: "rana@dar.sa", deals: 2, status: "متوقف" },
-  { name: "تِك لاين", contact: "فادي جابر", email: "fadi@techline.io", deals: 9, status: "نشط" },
+const clients: Client[] = [
+  {
+    name: "شركة الأفق",
+    contact: "نور العلي",
+    email: "nour@ofoq.com",
+    phone: "+963 900 111 222",
+    deals: 6,
+    active: true,
+    projects: ["منصة الأفق", "لوحة تقارير"],
+  },
+  {
+    name: "مجموعة نهضة",
+    contact: "خالد سمير",
+    email: "khaled@nahda.co",
+    phone: "+963 900 333 444",
+    deals: 3,
+    active: true,
+    projects: ["تطبيق نهضة"],
+  },
+  {
+    name: "دار المعمار",
+    contact: "رنا يوسف",
+    email: "rana@dar.sa",
+    phone: "+963 900 555 666",
+    deals: 2,
+    active: false,
+    projects: ["هوية دار المعمار"],
+  },
+  {
+    name: "تِك لاين",
+    contact: "فادي جابر",
+    email: "fadi@techline.io",
+    phone: "+963 900 777 888",
+    deals: 9,
+    active: true,
+    projects: ["موقع تِك لاين"],
+  },
 ];
 
 function Clients() {
-  const [selected, setSelected] = useState(clients[0]);
-
   return (
     <div>
-      <PageHeader title="الزبائن" subtitle="اختر زبوناً لعرض تفاصيله في البطاقة." />
-      <div className="grid gap-4 lg:grid-cols-3">
-        <div className="glass overflow-hidden rounded-2xl lg:col-span-2">
-          <table className="w-full text-right text-sm">
-            <thead className="bg-secondary/60 text-xs text-muted-foreground">
-              <tr>
-                <th className="p-3 font-medium">الزبون</th>
-                <th className="p-3 font-medium">مسؤول التواصل</th>
-                <th className="p-3 font-medium">الصفقات</th>
-                <th className="p-3 font-medium">الحالة</th>
-              </tr>
-            </thead>
-            <tbody>
-              {clients.map((c) => (
-                <tr
-                  key={c.name}
-                  onClick={() => setSelected(c)}
-                  className={`cursor-pointer border-t border-border/60 transition-colors hover:bg-secondary/50 ${
-                    selected.name === c.name ? "bg-secondary/70" : ""
-                  }`}
-                >
-                  <td className="p-3 font-medium">{c.name}</td>
-                  <td className="p-3 text-muted-foreground">{c.contact}</td>
-                  <td className="p-3 text-muted-foreground">{c.deals}</td>
-                  <td className="p-3">
-                    <span className="rounded-full bg-accent/50 px-2 py-0.5 text-xs text-accent-foreground">
-                      {c.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <PageHeader title="الزبائن" subtitle="بطاقات عرض تحتوي معلومات التواصل والمشاريع المرتبطة." />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {clients.map((c) => (
+          <article
+            key={c.name}
+            className="glass rounded-2xl p-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div className="flex items-center gap-3">
+              <span className="grid size-11 place-items-center rounded-2xl bg-gradient-to-br from-primary to-accent text-lg font-bold text-primary-foreground">
+                {c.name.charAt(0)}
+              </span>
+              <div className="flex-1">
+                <h2 className="font-semibold">{c.name}</h2>
+                <p className="text-xs text-muted-foreground">{c.contact}</p>
+              </div>
+              <span
+                className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] ${
+                  c.active
+                    ? "bg-accent/50 text-accent-foreground"
+                    : "bg-secondary text-muted-foreground"
+                }`}
+              >
+                {c.active ? <CircleCheck size={12} /> : <CirclePause size={12} />}
+                {c.active ? "نشط" : "متوقف"}
+              </span>
+            </div>
 
-        <aside className="glass rounded-2xl p-6">
-          <div className="grid size-12 place-items-center rounded-2xl bg-primary text-lg font-bold text-primary-foreground">
-            {selected.name.charAt(0)}
-          </div>
-          <h2 className="mt-4 text-lg font-semibold">{selected.name}</h2>
-          <dl className="mt-4 space-y-3 text-sm">
-            <div className="flex justify-between gap-3">
-              <dt className="text-muted-foreground">مسؤول التواصل</dt>
-              <dd>{selected.contact}</dd>
+            <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+              <li className="flex items-center gap-2">
+                <Mail size={14} />
+                <span dir="ltr">{c.email}</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone size={14} />
+                <span dir="ltr">{c.phone}</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Building2 size={14} />
+                <span>{c.deals} صفقات</span>
+              </li>
+            </ul>
+
+            <div className="mt-4 flex flex-wrap gap-1.5">
+              {c.projects.map((p) => (
+                <span key={p} className="rounded-full bg-secondary px-2 py-0.5 text-[11px]">
+                  {p}
+                </span>
+              ))}
             </div>
-            <div className="flex justify-between gap-3">
-              <dt className="text-muted-foreground">البريد</dt>
-              <dd dir="ltr">{selected.email}</dd>
-            </div>
-            <div className="flex justify-between gap-3">
-              <dt className="text-muted-foreground">الصفقات</dt>
-              <dd>{selected.deals}</dd>
-            </div>
-            <div className="flex justify-between gap-3">
-              <dt className="text-muted-foreground">الحالة</dt>
-              <dd>{selected.status}</dd>
-            </div>
-          </dl>
-        </aside>
+          </article>
+        ))}
       </div>
     </div>
   );
