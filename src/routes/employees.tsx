@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { can, useCompany } from "@/lib/company";
 
 export const Route = createFileRoute("/employees")({
   head: () => ({
@@ -29,12 +30,14 @@ const initial: Employee[] = [
 function Employees() {
   const [rows, setRows] = useState(initial);
   const [form, setForm] = useState<Employee>({ name: "", role: "", dept: "" });
+  const { company } = useCompany();
+  const canEdit = can(company.role, "edit");
 
   return (
     <div>
       <PageHeader title="الموظفون" subtitle="إدارة فريق العمل بشكل سريع ومباشر." />
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="glass overflow-hidden rounded-2xl lg:col-span-2">
+        <div className={`glass overflow-hidden rounded-2xl ${canEdit ? "lg:col-span-2" : "lg:col-span-3"}`}>
           <table className="w-full text-right text-sm">
             <thead className="bg-secondary/60 text-xs text-muted-foreground">
               <tr>
@@ -55,6 +58,7 @@ function Employees() {
           </table>
         </div>
 
+        {canEdit ? (
         <form
           className="glass space-y-4 rounded-2xl p-6"
           onSubmit={(e) => {
@@ -93,6 +97,7 @@ function Employees() {
             إضافة
           </Button>
         </form>
+        ) : null}
       </div>
     </div>
   );

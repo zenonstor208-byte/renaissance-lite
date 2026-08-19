@@ -35,7 +35,10 @@ function Index() {
       <PageHeader title="لوحة التحكم" subtitle="ملخص ثابت لأداء الشركة هذا الربع." />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((s) => (
-          <div key={s.label} className="glass rounded-2xl p-5">
+          <div
+            key={s.label}
+            className="glass rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+          >
             <p className="text-sm text-muted-foreground">{s.label}</p>
             <p className="mt-2 text-3xl font-bold">{s.value}</p>
             <p className="mt-1 text-xs text-muted-foreground">{s.hint}</p>
